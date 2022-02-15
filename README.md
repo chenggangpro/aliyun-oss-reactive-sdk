@@ -2,14 +2,12 @@
 
 > [Aliyun OSS offical document](https://doc.oss.aliyuncs.com)
 
-
 #### Plan Feature List
 
 * [ ] Authorization-related operations
   * [ ] Common Request Authorization
-* [ ] About the operation of Service
-  * [ ] GetService (ListBucket)
 * [ ] About the operation of Bucket
+  * [ ] List Bucket
   * [ ] Delete Bucket
   * [ ] Get Bucket (List Object)
   * [ ] Get Bucket Acl

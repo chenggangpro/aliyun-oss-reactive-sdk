@@ -38,13 +38,82 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
-        <reactor-bom.version>2020.0.15</reactor-bom.version>
+        <reactor-bom.version>2020.0.18</reactor-bom.version>
         <blockhound.version>1.0.6.RELEASE</blockhound.version>
         <junit-jupiter.version>5.8.2</junit-jupiter.version>
         <assertj.version>3.22.0</assertj.version>
         <hamcrest.version>2.2</hamcrest.version>
-        <aliyun-sdk-oss.version>3.14.0</aliyun-sdk-oss.version>
+        <jackson.version>2.13.2</jackson.version>
+        <jackson-databind.version>2.13.2.2</jackson-databind.version>
+        <jackson-bom.version>2.13.2.20220328</jackson-bom.version>
+        <lombok.version>1.18.14</lombok.version>
     </properties>
+
+    <dependencies>
+        <!--lombok-->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <!--reactor netty http-->
+        <dependency>
+            <groupId>io.projectreactor.netty</groupId>
+            <artifactId>reactor-netty-http</artifactId>
+        </dependency>
+        <!--jackson-->
+        <dependency>
+            <groupId>com.fasterxml.jackson.dataformat</groupId>
+            <artifactId>jackson-dataformat-xml</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-annotations</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.datatype</groupId>
+            <artifactId>jackson-datatype-jsr310</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.datatype</groupId>
+            <artifactId>jackson-datatype-jdk8</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.module</groupId>
+            <artifactId>jackson-module-jaxb-annotations</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.module</groupId>
+            <artifactId>jackson-module-parameter-names</artifactId>
+        </dependency>
+
+        <!--Test Scope-->
+
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.projectreactor</groupId>
+            <artifactId>reactor-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.hamcrest</groupId>
+            <artifactId>hamcrest</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+    </dependencies>
 
     <dependencyManagement>
         <dependencies>
@@ -63,14 +132,21 @@
                 <scope>import</scope>
             </dependency>
             <dependency>
+                <groupId>com.fasterxml.jackson</groupId>
+                <artifactId>jackson-bom</artifactId>
+                <version>${jackson-bom.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.projectlombok</groupId>
+                <artifactId>lombok</artifactId>
+                <version>${lombok.version}</version>
+            </dependency>
+            <dependency>
                 <groupId>io.projectreactor.tools</groupId>
                 <artifactId>blockhound</artifactId>
                 <version>${blockhound.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.aliyun.oss</groupId>
-                <artifactId>aliyun-sdk-oss</artifactId>
-                <version>${aliyun-sdk-oss.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.hamcrest</groupId>
@@ -132,7 +208,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.9.0</version>
+                <version>3.10.1</version>
                 <configuration>
                     <verbose>true</verbose>
                     <fork>true</fork>

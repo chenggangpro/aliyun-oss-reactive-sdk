@@ -47,6 +47,8 @@
         <jackson-databind.version>2.13.2.2</jackson-databind.version>
         <jackson-bom.version>2.13.2.20220328</jackson-bom.version>
         <lombok.version>1.18.14</lombok.version>
+        <mockito-junit-jupiter.version>4.5.1</mockito-junit-jupiter.version>
+        <easy-random-junit5-extension.version>0.2.0</easy-random-junit5-extension.version>
     </properties>
 
     <dependencies>
@@ -112,6 +114,16 @@
             <artifactId>hamcrest</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-junit-jupiter</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mvnsearch</groupId>
+            <artifactId>easy-random-junit5-extension</artifactId>
+            <scope>test</scope>
+        </dependency>
 
     </dependencies>
 
@@ -149,9 +161,28 @@
                 <version>${blockhound.version}</version>
             </dependency>
             <dependency>
+                <groupId>org.mockito</groupId>
+                <artifactId>mockito-junit-jupiter</artifactId>
+                <version>${mockito-junit-jupiter.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
                 <groupId>org.hamcrest</groupId>
                 <artifactId>hamcrest</artifactId>
                 <version>${hamcrest.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.mvnsearch</groupId>
+                <artifactId>easy-random-junit5-extension</artifactId>
+                <version>${easy-random-junit5-extension.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <artifactId>byte-buddy</artifactId>
+                        <groupId>net.bytebuddy</groupId>
+                    </exclusion>
+                </exclusions>
+                <scope>test</scope>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -240,6 +271,30 @@
                 <configuration>
                     <generateBackupPoms>false</generateBackupPoms>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.22.2</version>
+            </plugin>
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>0.8.7</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>generate-code-coverage-report</id>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>

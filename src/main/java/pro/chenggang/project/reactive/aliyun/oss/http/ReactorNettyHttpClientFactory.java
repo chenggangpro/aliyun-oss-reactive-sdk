@@ -95,8 +95,7 @@ public class ReactorNettyHttpClientFactory {
             sslContext.configure(sslContextBuilder -> sslContextBuilder.trustManager(trustedX509Certificates));
             hasSslSettings = true;
         }
-        boolean hasSslKeyStore = ssl.getKeyStore() != null && ssl.getKeyStore().length() > 0;
-        if (hasSslKeyStore) {
+        if (CharSequenceUtil.isNotEmpty(ssl.getKeyStore())) {
             sslContext.configure(sslContextBuilder -> sslContextBuilder.keyManager(this.getKeyManagerFactory()));
             hasSslSettings = true;
         }
@@ -175,9 +174,6 @@ public class ReactorNettyHttpClientFactory {
      */
     protected KeyManagerFactory getKeyManagerFactory() {
         ReactiveHttpClientConfiguration.Ssl ssl = this.reactiveHttpClientConfiguration.getSsl();
-        if (CharSequenceUtil.isEmpty(ssl.getKeyStore())) {
-            return null;
-        }
         try {
             KeyManagerFactory keyManagerFactory = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
             char[] keyPassword = ssl.getKeyPassword() != null ? ssl.getKeyPassword().toCharArray() : null;
@@ -243,7 +239,9 @@ public class ReactorNettyHttpClientFactory {
         if (pool.getMaxLifeTime() != null) {
             builder.maxLifeTime(pool.getMaxLifeTime());
         }
-        builder.evictInBackground(pool.getEvictionInterval());
+        if(pool.getEvictionInterval() != null){
+            builder.evictInBackground(pool.getEvictionInterval());
+        }
         return builder.build();
     }
 

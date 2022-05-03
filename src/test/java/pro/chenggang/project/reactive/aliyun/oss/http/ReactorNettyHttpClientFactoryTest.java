@@ -94,7 +94,22 @@ class ReactorNettyHttpClientFactoryTest {
         ssl.setTrustedX509Certificates(Collections.singletonList("single-cert.pem"));
         ssl.setKeyStorePassword("scg1234");
         ssl.setKeyStoreType("JKS");
-        ssl.setKeyStoreProvider("");
+        ssl.setKeyStoreProvider("SUN");
+        Assertions.assertThrows(Exception.class,() -> {
+            HttpClient result = reactorNettyHttpClientFactory.newInstance();;
+            Assertions.assertNull(result);
+        });
+    }
+
+    @Test
+    void testConfigureSslWithoutKeyStorePassword() {
+        ReactiveHttpClientConfiguration.Ssl ssl = reactiveHttpClientConfiguration.getSsl();
+        ssl.setUseInsecureTrustManager(false);
+        ssl.setKeyStore("keystore.jks");
+        ssl.setTrustedX509Certificates(Collections.singletonList("single-cert.pem"));
+        ssl.setKeyStorePassword(null);
+        ssl.setKeyStoreType("JKS");
+        ssl.setKeyStoreProvider("SUN");
         Assertions.assertThrows(Exception.class,() -> {
             HttpClient result = reactorNettyHttpClientFactory.newInstance();;
             Assertions.assertNull(result);

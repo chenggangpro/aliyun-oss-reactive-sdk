@@ -200,8 +200,7 @@ public class ReactorNettyHttpClientFactory {
                     : KeyStore.getInstance(ssl.getKeyStoreType());
             try {
                 URL url = ResourceUtil.getResource(ssl.getKeyStore());
-                store.load(url.openStream(),
-                        ssl.getKeyStorePassword() != null ? ssl.getKeyStorePassword().toCharArray() : null);
+                store.load(url.openStream(), ssl.getKeyStorePassword() != null ? ssl.getKeyStorePassword().toCharArray() : null);
             } catch (Exception e) {
                 throw new RuntimeException("Could not load key store ' " + ssl.getKeyStore() + "'", e);
             }

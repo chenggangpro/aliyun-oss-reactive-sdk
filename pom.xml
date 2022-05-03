@@ -49,6 +49,7 @@
         <lombok.version>1.18.14</lombok.version>
         <mockito-junit-jupiter.version>4.5.1</mockito-junit-jupiter.version>
         <easy-random-junit5-extension.version>0.2.0</easy-random-junit5-extension.version>
+        <hutool-all.version>5.7.22</hutool-all.version>
     </properties>
 
     <dependencies>
@@ -95,6 +96,10 @@
         <dependency>
             <groupId>com.fasterxml.jackson.module</groupId>
             <artifactId>jackson-module-parameter-names</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-all</artifactId>
         </dependency>
 
         <!--Test Scope-->
@@ -159,6 +164,11 @@
                 <groupId>io.projectreactor.tools</groupId>
                 <artifactId>blockhound</artifactId>
                 <version>${blockhound.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>cn.hutool</groupId>
+                <artifactId>hutool-all</artifactId>
+                <version>${hutool-all.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.mockito</groupId>

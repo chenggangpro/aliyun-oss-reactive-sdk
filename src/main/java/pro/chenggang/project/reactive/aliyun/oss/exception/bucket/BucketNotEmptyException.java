@@ -6,7 +6,7 @@ import lombok.Getter;
 import pro.chenggang.project.reactive.aliyun.oss.exception.OssException;
 
 /**
- * @author evans
+ * @author Gang Cheng
  * @version 1.0.0
  * @since 1.0.0
  */

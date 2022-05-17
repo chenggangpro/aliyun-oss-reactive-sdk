@@ -1,4 +1,4 @@
-package pro.chenggang.project.reactive.aliyun.oss.http;
+package pro.chenggang.project.reactive.aliyun.oss.http.netty;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -12,7 +12,6 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- *
  * @author Gang Cheng
  * @version 1.0.0
  * @since 1.0.0
@@ -36,14 +35,15 @@ class ReactorNettyHttpClientFactoryTest {
         pool.setMaxLifeTime(Duration.ofSeconds(60));
         pool.setEvictionInterval(Duration.ofSeconds(30));
         httpClientCustomizers = Collections.singletonList(httpClient -> httpClient);
-        reactorNettyHttpClientFactory = new ReactorNettyHttpClientFactory(reactiveHttpClientConfiguration,httpClientCustomizers);
+        reactorNettyHttpClientFactory = new ReactorNettyHttpClientFactory(reactiveHttpClientConfiguration, httpClientCustomizers);
     }
 
     @Test
     void testNewInstance() {
-        HttpClient result = reactorNettyHttpClientFactory.newInstance();
+        HttpClient result = reactorNettyHttpClientFactory.newReactorNettyHttpClient();
         Assertions.assertNotNull(result);
     }
+
     @Test
     void testNewInstanceWithoutSettings() {
         reactiveHttpClientConfiguration = new ReactiveHttpClientConfiguration();
@@ -54,22 +54,22 @@ class ReactorNettyHttpClientFactoryTest {
         pool.setMaxIdleTime(null);
         pool.setMaxLifeTime(null);
         pool.setEvictionInterval(null);
-        reactorNettyHttpClientFactory = new ReactorNettyHttpClientFactory(reactiveHttpClientConfiguration,null);
-        HttpClient result = reactorNettyHttpClientFactory.newInstance();
+        reactorNettyHttpClientFactory = new ReactorNettyHttpClientFactory(reactiveHttpClientConfiguration, null);
+        HttpClient result = reactorNettyHttpClientFactory.newReactorNettyHttpClient();
         Assertions.assertNotNull(result);
     }
 
     @Test
     void testNewInstanceWithDisabledPoolType() {
         reactiveHttpClientConfiguration.getPool().setType(ReactiveHttpClientConfiguration.Pool.PoolType.DISABLED);
-        HttpClient result = reactorNettyHttpClientFactory.newInstance();
+        HttpClient result = reactorNettyHttpClientFactory.newReactorNettyHttpClient();
         Assertions.assertNotNull(result);
     }
 
     @Test
     void testNewInstanceWithFixedPoolType() {
         reactiveHttpClientConfiguration.getPool().setType(ReactiveHttpClientConfiguration.Pool.PoolType.FIXED);
-        HttpClient result = reactorNettyHttpClientFactory.newInstance();
+        HttpClient result = reactorNettyHttpClientFactory.newReactorNettyHttpClient();
         Assertions.assertNotNull(result);
     }
 
@@ -82,7 +82,7 @@ class ReactorNettyHttpClientFactoryTest {
         ssl.setKeyPassword("keyscg1234");
         ssl.setKeyStorePassword("scg1234");
         ssl.setKeyStoreType("JKS");
-        HttpClient result = reactorNettyHttpClientFactory.newInstance();;
+        HttpClient result = reactorNettyHttpClientFactory.newReactorNettyHttpClient();
         Assertions.assertNotNull(result);
     }
 
@@ -95,8 +95,8 @@ class ReactorNettyHttpClientFactoryTest {
         ssl.setKeyStorePassword("scg1234");
         ssl.setKeyStoreType("JKS");
         ssl.setKeyStoreProvider("SUN");
-        Assertions.assertThrows(Exception.class,() -> {
-            HttpClient result = reactorNettyHttpClientFactory.newInstance();;
+        Assertions.assertThrows(Exception.class, () -> {
+            HttpClient result = reactorNettyHttpClientFactory.newReactorNettyHttpClient();
             Assertions.assertNull(result);
         });
     }
@@ -110,8 +110,8 @@ class ReactorNettyHttpClientFactoryTest {
         ssl.setKeyStorePassword(null);
         ssl.setKeyStoreType("JKS");
         ssl.setKeyStoreProvider("SUN");
-        Assertions.assertThrows(Exception.class,() -> {
-            HttpClient result = reactorNettyHttpClientFactory.newInstance();;
+        Assertions.assertThrows(Exception.class, () -> {
+            HttpClient result = reactorNettyHttpClientFactory.newReactorNettyHttpClient();
             Assertions.assertNull(result);
         });
     }
@@ -121,7 +121,7 @@ class ReactorNettyHttpClientFactoryTest {
         ReactiveHttpClientConfiguration.Ssl ssl = reactiveHttpClientConfiguration.getSsl();
         ssl.setUseInsecureTrustManager(false);
         ssl.setKeyStore(null);
-        HttpClient result = reactorNettyHttpClientFactory.newInstance();;
+        HttpClient result = reactorNettyHttpClientFactory.newReactorNettyHttpClient();
         Assertions.assertNotNull(result);
     }
 
@@ -134,8 +134,8 @@ class ReactorNettyHttpClientFactoryTest {
         ssl.setKeyPassword("keyscg12345");
         ssl.setKeyStorePassword("scg12345");
         ssl.setKeyStoreType("JKS");
-        Assertions.assertThrows(Exception.class,() -> {
-            HttpClient result = reactorNettyHttpClientFactory.newInstance();;
+        Assertions.assertThrows(Exception.class, () -> {
+            HttpClient result = reactorNettyHttpClientFactory.newReactorNettyHttpClient();
             Assertions.assertNull(result);
         });
     }
@@ -148,8 +148,8 @@ class ReactorNettyHttpClientFactoryTest {
         ssl.setTrustedX509Certificates(Collections.singletonList("single-cert.pem"));
         ssl.setKeyStorePassword("scg1234");
         ssl.setKeyStoreType("RRRRJKS");
-        Assertions.assertThrows(Exception.class,() -> {
-            HttpClient result = reactorNettyHttpClientFactory.newInstance();;
+        Assertions.assertThrows(Exception.class, () -> {
+            HttpClient result = reactorNettyHttpClientFactory.newReactorNettyHttpClient();
             Assertions.assertNull(result);
         });
     }
@@ -163,8 +163,8 @@ class ReactorNettyHttpClientFactoryTest {
         ssl.setKeyPassword("keyscg12345");
         ssl.setKeyStorePassword("scg12345");
         ssl.setKeyStoreType("JKS");
-        Assertions.assertThrows(Exception.class,() -> {
-            HttpClient result = reactorNettyHttpClientFactory.newInstance();;
+        Assertions.assertThrows(Exception.class, () -> {
+            HttpClient result = reactorNettyHttpClientFactory.newReactorNettyHttpClient();
             Assertions.assertNull(result);
         });
 
@@ -179,7 +179,7 @@ class ReactorNettyHttpClientFactoryTest {
         proxy.setUsername("username");
         proxy.setPassword("password");
         proxy.setType(ProxyProvider.Proxy.HTTP);
-        HttpClient result = reactorNettyHttpClientFactory.newInstance();;
+        HttpClient result = reactorNettyHttpClientFactory.newReactorNettyHttpClient();
         Assertions.assertNotNull(result);
     }
 
@@ -192,13 +192,13 @@ class ReactorNettyHttpClientFactoryTest {
         proxy.setUsername(null);
         proxy.setPassword(null);
         proxy.setType(ProxyProvider.Proxy.HTTP);
-        HttpClient result = reactorNettyHttpClientFactory.newInstance();;
+        HttpClient result = reactorNettyHttpClientFactory.newReactorNettyHttpClient();
         Assertions.assertNotNull(result);
     }
 
     @Test
     void testBuildConnectionProvider() {
-        HttpClient result = reactorNettyHttpClientFactory.newInstance();
+        HttpClient result = reactorNettyHttpClientFactory.newReactorNettyHttpClient();
         Assertions.assertNotNull(result);
     }
 }

@@ -6,7 +6,7 @@ import lombok.Getter;
 import pro.chenggang.project.reactive.aliyun.oss.exception.OssException;
 
 /**
- * Invalid argument 
+ * Invalid argument
  *
  * @author Gang Cheng
  * @version 1.0.0

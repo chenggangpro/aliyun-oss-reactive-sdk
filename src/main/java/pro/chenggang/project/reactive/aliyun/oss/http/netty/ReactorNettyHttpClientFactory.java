@@ -1,4 +1,4 @@
-package pro.chenggang.project.reactive.aliyun.oss.http;
+package pro.chenggang.project.reactive.aliyun.oss.http.netty;
 
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.io.resource.ResourceUtil;
@@ -48,7 +48,7 @@ public class ReactorNettyHttpClientFactory {
      *
      * @return the http client
      */
-    public HttpClient newInstance() {
+    public HttpClient newReactorNettyHttpClient() {
         ConnectionProvider connectionProvider = this.buildConnectionProvider(this.reactiveHttpClientConfiguration);
         HttpClient httpClient = HttpClient.create(connectionProvider);
         if (this.reactiveHttpClientConfiguration.getConnectTimeout() != null) {
@@ -152,7 +152,7 @@ public class ReactorNettyHttpClientFactory {
             ArrayList<Certificate> allCerts = new ArrayList<>();
             for (String trustedCert : ssl.getTrustedX509Certificates()) {
                 URL url = ResourceUtil.getResource(trustedCert);
-                if(null != url){
+                if (null != url) {
                     try {
                         Collection<? extends Certificate> certs = certificateFactory.generateCertificates(url.openStream());
                         allCerts.addAll(certs);
@@ -238,7 +238,7 @@ public class ReactorNettyHttpClientFactory {
         if (pool.getMaxLifeTime() != null) {
             builder.maxLifeTime(pool.getMaxLifeTime());
         }
-        if(pool.getEvictionInterval() != null){
+        if (pool.getEvictionInterval() != null) {
             builder.evictInBackground(pool.getEvictionInterval());
         }
         return builder.build();

@@ -14,8 +14,8 @@ import static org.hamcrest.Matchers.notNullValue;
 class BucketAlreadyExistsExceptionTest extends OssExceptionTest {
 
     @Test
-    public void test(){
-        BucketAlreadyExistsException bucketAlreadyExistsException = new BucketAlreadyExistsException(errorCode,errorMessage,requestId,hostId);
-        assertThat(bucketAlreadyExistsException,notNullValue());
+    public void test() {
+        BucketAlreadyExistsException bucketAlreadyExistsException = new BucketAlreadyExistsException(errorCode, errorMessage, requestId, hostId);
+        assertThat(bucketAlreadyExistsException, notNullValue());
     }
 }

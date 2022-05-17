@@ -44,6 +44,6 @@ class AccessControlPolicyTest {
     @Test
     void testToString() {
         String result = accessControlPolicy.toString();
-        assertThat(result,notNullValue());
+        assertThat(result, notNullValue());
     }
 }

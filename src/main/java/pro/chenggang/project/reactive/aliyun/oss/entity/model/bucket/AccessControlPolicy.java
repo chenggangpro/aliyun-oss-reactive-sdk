@@ -13,13 +13,13 @@ import pro.chenggang.project.reactive.aliyun.oss.option.external.AccessControlLi
 @ToString
 public class AccessControlPolicy {
 
-	/**
-	 * the bucket's owner
-	 */
-	private Owner owner;
-	/**
-	 * the bucket's acl
-	 */
-	private AccessControlList accessControlList;
+    /**
+     * the bucket's owner
+     */
+    private Owner owner;
+    /**
+     * the bucket's acl
+     */
+    private AccessControlList accessControlList;
 
 }

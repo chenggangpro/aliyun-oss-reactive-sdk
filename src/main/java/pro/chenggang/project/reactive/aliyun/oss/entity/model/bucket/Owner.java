@@ -12,13 +12,13 @@ import lombok.ToString;
 @ToString
 public class Owner {
 
-	/**
-	 * owner id
-	 */
-	private String id;
-	/**
-	 * owner display name
-	 */
-	private String displayName;
+    /**
+     * owner id
+     */
+    private String id;
+    /**
+     * owner display name
+     */
+    private String displayName;
 
 }

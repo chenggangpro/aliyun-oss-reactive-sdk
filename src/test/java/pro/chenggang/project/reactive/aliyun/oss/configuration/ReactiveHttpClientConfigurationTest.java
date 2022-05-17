@@ -15,7 +15,7 @@ class ReactiveHttpClientConfigurationTest {
     @Test
     void testReactiveHttpClientConfiguration() {
         ReactiveHttpClientConfiguration reactiveHttpClientConfiguration = new ReactiveHttpClientConfiguration();
-        assertThat(reactiveHttpClientConfiguration,notNullValue());
+        assertThat(reactiveHttpClientConfiguration, notNullValue());
     }
 
 }

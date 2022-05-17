@@ -15,7 +15,7 @@ class ReactiveOssConfigurationTest {
     @Test
     void testReactiveOssConfiguration() {
         ReactiveOssConfiguration reactiveOssConfiguration = new ReactiveOssConfiguration();
-        assertThat(reactiveOssConfiguration,notNullValue());
+        assertThat(reactiveOssConfiguration, notNullValue());
     }
 
 }

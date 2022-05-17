@@ -72,6 +72,6 @@ class BucketListResultTest {
     @Test
     void testToString() {
         String result = bucketListResult.toString();
-        assertThat(result,notNullValue());
+        assertThat(result, notNullValue());
     }
 }

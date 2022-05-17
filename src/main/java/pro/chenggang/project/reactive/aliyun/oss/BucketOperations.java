@@ -72,7 +72,7 @@ public interface BucketOperations {
     /**
      * Put bucket access control policy with bucket name and {@link AccessControlList}
      *
-     * @param bucketName             the target bucket name
+     * @param bucketName        the target bucket name
      * @param accessControlList the target {@link AccessControlList} to put
      * @return nothing if success
      * @throws AccessDeniedException if the target bucket without permission to set acl

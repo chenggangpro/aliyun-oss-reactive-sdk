@@ -14,9 +14,9 @@ import static org.hamcrest.Matchers.notNullValue;
 class AccessDeniedExceptionTest extends OssExceptionTest {
 
     @Test
-    public void test(){
-        AccessDeniedException accessDeniedException = new AccessDeniedException(errorCode,errorMessage,requestId,hostId);
-        assertThat(accessDeniedException,notNullValue());
+    public void test() {
+        AccessDeniedException accessDeniedException = new AccessDeniedException(errorCode, errorMessage, requestId, hostId);
+        assertThat(accessDeniedException, notNullValue());
     }
 
 }

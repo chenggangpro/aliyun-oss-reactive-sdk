@@ -32,6 +32,6 @@ class OwnerTest {
     @Test
     void testToString() {
         String result = owner.toString();
-        assertThat(result,notNullValue());
+        assertThat(result, notNullValue());
     }
 }

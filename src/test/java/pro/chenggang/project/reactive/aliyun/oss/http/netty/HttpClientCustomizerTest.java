@@ -1,4 +1,4 @@
-package pro.chenggang.project.reactive.aliyun.oss.http;
+package pro.chenggang.project.reactive.aliyun.oss.http.netty;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -16,7 +16,7 @@ class HttpClientCustomizerTest {
         HttpClientCustomizer httpClientCustomizer = httpClient -> httpClient;
         HttpClient httpClient = HttpClient.create();
         HttpClient result = httpClientCustomizer.customize(httpClient);
-        Assertions.assertEquals(httpClient,result);
+        Assertions.assertEquals(httpClient, result);
     }
 
 }

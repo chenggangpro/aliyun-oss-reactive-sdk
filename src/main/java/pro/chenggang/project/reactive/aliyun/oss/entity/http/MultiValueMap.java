@@ -14,7 +14,7 @@ import java.util.Map;
  * @version 1.0.0
  * @since 1.0.0
  */
-public class MultiValueMap extends CaseInsensitiveLinkedMap<String, List<String>> {
+public class MultiValueMap<K, V> extends CaseInsensitiveLinkedMap<K, List<V>> {
 
     private static final long serialVersionUID = 7154336457175941243L;
 
@@ -26,8 +26,8 @@ public class MultiValueMap extends CaseInsensitiveLinkedMap<String, List<String>
      * @param key the key
      * @return the first
      */
-    public String getFirst(String key) {
-        List<String> values = super.get(key);
+    public V getFirst(K key) {
+        List<V> values = super.get(key);
         return (values != null && !values.isEmpty() ? values.get(0) : null);
     }
 
@@ -37,8 +37,8 @@ public class MultiValueMap extends CaseInsensitiveLinkedMap<String, List<String>
      * @param key   the key
      * @param value the value
      */
-    public void add(String key, String value) {
-        List<String> values = super.computeIfAbsent(key, k -> new ArrayList<>(1));
+    public void add(K key, V value) {
+        List<V> values = super.computeIfAbsent(key, k -> new ArrayList<>(1));
         values.add(value);
     }
 
@@ -48,8 +48,8 @@ public class MultiValueMap extends CaseInsensitiveLinkedMap<String, List<String>
      * @param key    the key
      * @param values the values
      */
-    public void addAll(String key, List<String> values) {
-        List<String> currentValues = super.computeIfAbsent(key, k -> new ArrayList<>(1));
+    public void addAll(K key, List<V> values) {
+        List<V> currentValues = super.computeIfAbsent(key, k -> new ArrayList<>(1));
         currentValues.addAll(values);
     }
 
@@ -58,8 +58,8 @@ public class MultiValueMap extends CaseInsensitiveLinkedMap<String, List<String>
      *
      * @param values the values
      */
-    public void addAll(MultiValueMap values) {
-        for (Map.Entry<String, List<String>> entry : values.entrySet()) {
+    public void addAll(MultiValueMap<K, V> values) {
+        for (Map.Entry<K, List<V>> entry : values.entrySet()) {
             addAll(entry.getKey(), entry.getValue());
         }
     }
@@ -70,8 +70,8 @@ public class MultiValueMap extends CaseInsensitiveLinkedMap<String, List<String>
      * @param key   the key
      * @param value the value
      */
-    public void set(String key, String value) {
-        List<String> values = new ArrayList<>(1);
+    public void set(K key, V value) {
+        List<V> values = new ArrayList<>(1);
         values.add(value);
         this.put(key, values);
     }
@@ -81,7 +81,7 @@ public class MultiValueMap extends CaseInsensitiveLinkedMap<String, List<String>
      *
      * @param values the values
      */
-    public void setAll(Map<String, String> values) {
+    public void setAll(Map<K, V> values) {
         values.forEach(this::set);
     }
 
@@ -90,11 +90,11 @@ public class MultiValueMap extends CaseInsensitiveLinkedMap<String, List<String>
      *
      * @return the map
      */
-    public Map<String, String> toSingleValueMap() {
-        Map<String, String> singleValueMap = new LinkedHashMap<>((int) (super.size() / DEFAULT_LOAD_FACTOR), DEFAULT_LOAD_FACTOR);
-        for (Map.Entry<String, List<String>> entry : super.entrySet()) {
-            String key = entry.getKey();
-            List<String> values = entry.getValue();
+    public Map<K, V> toSingleValueMap() {
+        Map<K, V> singleValueMap = new LinkedHashMap<>((int) (super.size() / DEFAULT_LOAD_FACTOR), DEFAULT_LOAD_FACTOR);
+        for (Map.Entry<K, List<V>> entry : super.entrySet()) {
+            K key = entry.getKey();
+            List<V> values = entry.getValue();
             if (values != null && !values.isEmpty()) {
                 singleValueMap.put(key, values.get(0));
             }

@@ -24,18 +24,18 @@ class MultiValueMapTest {
     String value = "value";
     String otherValue = "otherValue";
 
-    MultiValueMap multiValueMap;
+    MultiValueMap<String,String> multiValueMap;
 
     @BeforeEach
     void setUp() {
-        multiValueMap = new MultiValueMap();
+        multiValueMap = new MultiValueMap<>();
         assertNotNull(multiValueMap);
         multiValueMap.add(key, value);
     }
 
     @Test
     public void testConstruct() {
-        MultiValueMap map = new MultiValueMap();
+        MultiValueMap map = new MultiValueMap<>();
         assertNotNull(map);
     }
 
@@ -78,12 +78,12 @@ class MultiValueMapTest {
 
     @Test
     void testAddAll2() {
-        multiValueMap.addAll(new MultiValueMap());
+        multiValueMap.addAll(new MultiValueMap<>());
     }
 
     @Test
     void testAddAll3() {
-        MultiValueMap map = new MultiValueMap();
+        MultiValueMap<String,String> map = new MultiValueMap<>();
         map.add(key, value);
         multiValueMap.addAll(map);
     }

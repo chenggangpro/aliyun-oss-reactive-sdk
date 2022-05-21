@@ -6,7 +6,7 @@ import pro.chenggang.project.reactive.aliyun.oss.entity.http.OssHttpRequest.Byte
 import pro.chenggang.project.reactive.aliyun.oss.entity.http.OssHttpRequest.FileBody;
 import pro.chenggang.project.reactive.aliyun.oss.entity.http.OssHttpRequest.FormBody;
 import pro.chenggang.project.reactive.aliyun.oss.entity.http.OssHttpRequest.PathBody;
-import pro.chenggang.project.reactive.aliyun.oss.entity.http.OssHttpRequest.StringBody;
+import pro.chenggang.project.reactive.aliyun.oss.entity.http.OssHttpRequest.SimpleBody;
 import pro.chenggang.project.reactive.aliyun.oss.option.http.OssHttpMethod;
 import reactor.core.publisher.Flux;
 
@@ -26,10 +26,10 @@ public class OssRequestBuilder {
 
     private final OssHttpMethod ossHttpMethod;
     private final URL url;
-    private final MultiValueMap headers = new MultiValueMap();
-    private final MultiValueMap parameters = new MultiValueMap();
+    private final MultiValueMap<String,String> headers = new MultiValueMap<>();
+    private final MultiValueMap<String,String> parameters = new MultiValueMap<>();
     private FormBody formBody;
-    private StringBody stringBody;
+    private SimpleBody simpleBody;
     private FileBody fileBody;
     private PathBody pathBody;
     private ByteBufferBody byteBufferBody;
@@ -86,9 +86,9 @@ public class OssRequestBuilder {
      * @param contentType the content type
      * @return the string body
      */
-    public StringBodyBuilder newStringBody(String contentType) {
-        this.stringBody = null;
-        return new StringBodyBuilder(this, contentType);
+    public SimpleBodyBuilder newSimpleBody(String contentType) {
+        this.simpleBody = null;
+        return new SimpleBodyBuilder(this, contentType);
     }
 
     /**
@@ -135,7 +135,7 @@ public class OssRequestBuilder {
                 headers,
                 parameters,
                 formBody,
-                stringBody,
+                simpleBody,
                 fileBody,
                 pathBody,
                 byteBufferBody
@@ -177,15 +177,15 @@ public class OssRequestBuilder {
     }
 
     /**
-     * The String body.
+     * The Simple body.
      */
-    public static class StringBodyBuilder {
+    public static class SimpleBodyBuilder {
 
         private final OssRequestBuilder ossRequestBuilder;
         private final String contentType;
-        private String bodyContent;
+        private Object bodyData;
 
-        private StringBodyBuilder(OssRequestBuilder ossRequestBuilder, String contentType) {
+        private SimpleBodyBuilder(OssRequestBuilder ossRequestBuilder, String contentType) {
             this.ossRequestBuilder = ossRequestBuilder;
             this.contentType = contentType;
         }
@@ -193,11 +193,11 @@ public class OssRequestBuilder {
         /**
          * Set body content.
          *
-         * @param bodyContent the body content
+         * @param bodyData the body content
          * @return the body content
          */
-        public StringBodyBuilder setBodyContent(String bodyContent) {
-            this.bodyContent = bodyContent;
+        public SimpleBodyBuilder setBodyData(Object bodyData) {
+            this.bodyData = bodyData;
             return this;
         }
 
@@ -207,7 +207,7 @@ public class OssRequestBuilder {
          * @return the builder
          */
         public OssRequestBuilder and() {
-            this.ossRequestBuilder.stringBody = new StringBody(contentType).setBodyContent(bodyContent);
+            this.ossRequestBuilder.simpleBody = new SimpleBody(contentType).setBodyData(bodyData);
             return ossRequestBuilder;
         }
     }

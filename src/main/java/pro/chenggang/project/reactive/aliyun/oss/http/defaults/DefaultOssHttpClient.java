@@ -23,8 +23,8 @@ import java.nio.ByteBuffer;
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
 public class DefaultOssHttpClient implements OssHttpClient {
 
-    private final ReactiveHttpClientConfiguration reactiveHttpClientConfiguration;
-    private final HttpClient httpClient;
+    protected final ReactiveHttpClientConfiguration reactiveHttpClientConfiguration;
+    protected final HttpClient httpClient;
 
     @Override
     public <T> Mono<T> exchangeToMono(OssHttpRequest ossHttpRequest, TypeReference<? extends T> elementTypeReference) {

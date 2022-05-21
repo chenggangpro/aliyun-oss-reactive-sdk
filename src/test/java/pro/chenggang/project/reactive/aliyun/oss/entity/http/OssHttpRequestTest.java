@@ -21,8 +21,8 @@ class OssHttpRequestTest {
         OssRequestBuilder requestBuilder = OssHttpRequest.newBuilder("http://127.0.0.1", OssHttpMethod.GET);
         OssHttpRequest ossHttpRequest = requestBuilder.addHeader("key", "value")
                 .addParameter("key", "value")
-                .newStringBody("content-type")
-                .setBodyContent("body")
+                .newSimpleBody("content-type")
+                .setBodyData("body")
                 .and()
                 .newFormBody()
                 .addFormData("key", "value")

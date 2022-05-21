@@ -28,21 +28,21 @@ import static lombok.AccessLevel.PROTECTED;
 public class OssHttpRequest {
 
     private final OssHttpMethod ossHttpMethod;
-    private final MultiValueMap headers = new MultiValueMap();
-    private final MultiValueMap parameters = new MultiValueMap();
+    private final MultiValueMap<String,String> headers = new MultiValueMap<>();
+    private final MultiValueMap<String,String> parameters = new MultiValueMap<>();
     private final URL url;
     private final FormBody formBody;
-    private final StringBody stringBody;
+    private final SimpleBody simpleBody;
     private final FileBody fileBody;
     private final PathBody pathBody;
     private final ByteBufferBody byteBufferBody;
 
     protected OssHttpRequest(OssHttpMethod ossHttpMethod,
                              URL url,
-                             MultiValueMap headers,
-                             MultiValueMap parameters,
+                             MultiValueMap<String,String> headers,
+                             MultiValueMap<String,String> parameters,
                              FormBody formBody,
-                             StringBody stringBody,
+                             SimpleBody simpleBody,
                              FileBody fileBody,
                              PathBody pathBody,
                              ByteBufferBody byteBufferBody) {
@@ -51,7 +51,7 @@ public class OssHttpRequest {
         this.headers.addAll(headers);
         this.parameters.addAll(parameters);
         this.formBody = formBody;
-        this.stringBody = stringBody;
+        this.simpleBody = simpleBody;
         this.fileBody = fileBody;
         this.pathBody = pathBody;
         this.byteBufferBody = byteBufferBody;
@@ -95,23 +95,23 @@ public class OssHttpRequest {
      * The String body.
      */
     @Getter
-    public static class StringBody {
+    public static class SimpleBody {
 
         private final Map<String, String> contentType;
-        private String bodyContent;
+        private Object bodyData;
 
-        protected StringBody(String contentType) {
+        protected SimpleBody(String contentType) {
             this.contentType = Collections.singletonMap(CONTENT_TYPE.getValue(), contentType);
         }
 
         /**
          * Set body content.
          *
-         * @param bodyContent the body content
+         * @param bodyData the body content
          * @return the body content
          */
-        public StringBody setBodyContent(String bodyContent) {
-            this.bodyContent = bodyContent;
+        public SimpleBody setBodyData(Object bodyData) {
+            this.bodyData = bodyData;
             return this;
         }
 

@@ -22,5 +22,3 @@ class CommonStatusTest {
         Assertions.assertEquals(CommonStatus.ENABLED, result);
     }
 }
-
-//Generated with love by TestMe :) Please report issues and submit feature requests at: http://weirddev.com/forum#!/testme

@@ -32,4 +32,10 @@ class OssErrorCodeTest {
         Assertions.assertTrue(result.isPresent());
         Assertions.assertEquals(ACCESS_DENIED,result.get());
     }
+
+    @Test
+    void testValueOfErrorCodeEmpty() {
+        Optional<OssErrorCode> result = OssErrorCode.valueOfErrorCode("");
+        Assertions.assertFalse(result.isPresent());
+    }
 }

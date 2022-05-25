@@ -1,6 +1,5 @@
 package pro.chenggang.project.reactive.aliyun.oss.entity.http;
 
-import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.net.url.UrlQuery;
 import cn.hutool.http.ContentType;
 import lombok.Getter;
@@ -188,9 +187,8 @@ public class OssHttpRequest {
          * @param value the value
          * @return the form body
          */
-        public FormBody addFormData(String key, Object value) {
+        public void addFormData(String key, Object value) {
             this.formContent.put(key, value);
-            return this;
         }
 
     }

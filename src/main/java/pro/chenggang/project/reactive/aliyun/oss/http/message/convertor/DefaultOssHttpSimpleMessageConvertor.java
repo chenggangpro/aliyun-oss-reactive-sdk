@@ -65,8 +65,12 @@ public class DefaultOssHttpSimpleMessageConvertor implements OssHttpSimpleMessag
         return bodyData.toString();
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public <T> T convertResponse(String contentType, String responseData, Class<T> elementType) {
+        if (String.class.equals(elementType)) {
+            return (T) responseData;
+        }
         if (StrUtil.startWith(contentType, JSON.getValue())) {
             try {
                 return this.jsonObjectMapper.readValue(responseData, elementType);
@@ -81,14 +85,15 @@ public class DefaultOssHttpSimpleMessageConvertor implements OssHttpSimpleMessag
                 throw new SerializeFailedException(e);
             }
         }
-        if (StrUtil.startWith(contentType, "text/") && String.class.equals(elementType)) {
-            return (T) responseData;
-        }
         throw new SerializeFailedException("Could not convert response data with [" + contentType + "]");
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public <T> T convertResponse(String contentType, String responseData, TypeReference<T> elementType) {
+        if (String.class.equals(elementType.getType())) {
+            return (T) responseData;
+        }
         if (StrUtil.startWith(contentType, JSON.getValue())) {
             try {
                 return this.jsonObjectMapper.readValue(responseData, elementType);
@@ -102,9 +107,6 @@ public class DefaultOssHttpSimpleMessageConvertor implements OssHttpSimpleMessag
             } catch (Exception e) {
                 throw new SerializeFailedException(e);
             }
-        }
-        if (StrUtil.startWith(contentType, "text/") && String.class.equals(elementType.getType())) {
-            return (T) responseData;
         }
         throw new SerializeFailedException("Could not convert response data with [" + contentType + "]");
     }

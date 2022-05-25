@@ -31,6 +31,7 @@ import reactor.netty.http.client.HttpClientResponse;
 
 import java.io.File;
 import java.nio.ByteBuffer;
+import java.nio.file.Path;
 import java.time.Duration;
 import java.util.List;
 import java.util.Map;
@@ -202,6 +203,10 @@ public class DefaultOssHttpClient implements OssHttpClient {
                                 clientForm = clientForm.file(key, (File) value);
                                 continue;
                             }
+                            if (value instanceof Path) {
+                                clientForm = clientForm.file(key, ((Path) value).toFile());
+                                continue;
+                            }
                             clientForm = clientForm.attr(key, value.toString());
                         }
                     })
@@ -231,10 +236,11 @@ public class DefaultOssHttpClient implements OssHttpClient {
      * @return the request sender
      */
     private RequestSender assembleRequestSender(OssHttpRequest ossHttpRequest) {
+        MultiValueMap<String, String> headers = ossHttpRequest.getHeaders();
         HttpClient currentHttpClient = this.httpClient
                 .headers(httpHeaders -> {
                     final DefaultHttpHeaders defaultHttpHeaders = new DefaultHttpHeaders();
-                    ossHttpRequest.getHeaders().forEach((k, v) -> defaultHttpHeaders.set(k, v));
+                    headers.forEach((k, v) -> defaultHttpHeaders.set(k, v));
                     httpHeaders.add(defaultHttpHeaders);
                 });
         MultiValueMap<String, String> cookies = ossHttpRequest.getCookies();

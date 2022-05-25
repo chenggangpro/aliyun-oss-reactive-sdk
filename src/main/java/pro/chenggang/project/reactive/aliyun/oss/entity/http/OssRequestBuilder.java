@@ -5,18 +5,17 @@ import lombok.SneakyThrows;
 import pro.chenggang.project.reactive.aliyun.oss.entity.http.OssHttpRequest.ByteBufferBody;
 import pro.chenggang.project.reactive.aliyun.oss.entity.http.OssHttpRequest.FileBody;
 import pro.chenggang.project.reactive.aliyun.oss.entity.http.OssHttpRequest.FormBody;
-import pro.chenggang.project.reactive.aliyun.oss.entity.http.OssHttpRequest.PathBody;
 import pro.chenggang.project.reactive.aliyun.oss.entity.http.OssHttpRequest.SimpleBody;
 import pro.chenggang.project.reactive.aliyun.oss.option.http.OssHttpMethod;
 import reactor.core.publisher.Flux;
 
-import java.io.File;
 import java.net.URL;
 import java.nio.ByteBuffer;
 import java.nio.file.Path;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import static cn.hutool.http.Header.CONTENT_TYPE;
 import static lombok.AccessLevel.PRIVATE;
 
 /**
@@ -27,11 +26,11 @@ public class OssRequestBuilder {
     private final OssHttpMethod ossHttpMethod;
     private final URL url;
     private final MultiValueMap<String,String> headers = new MultiValueMap<>();
+    private final MultiValueMap<String, String> cookies = new MultiValueMap<>();
     private final MultiValueMap<String,String> parameters = new MultiValueMap<>();
     private FormBody formBody;
     private SimpleBody simpleBody;
     private FileBody fileBody;
-    private PathBody pathBody;
     private ByteBufferBody byteBufferBody;
 
     /**
@@ -71,6 +70,18 @@ public class OssRequestBuilder {
     }
 
     /**
+     * Add cookie .
+     *
+     * @param cookieKey   the cookie key
+     * @param cookieValue the cookie value
+     * @return the builder
+     */
+    public OssRequestBuilder addCookie(String cookieKey, String cookieValue) {
+        this.cookies.add(cookieKey, cookieValue);
+        return this;
+    }
+
+    /**
      * New form body.
      *
      * @return the form body
@@ -97,19 +108,8 @@ public class OssRequestBuilder {
      * @param file the file
      * @return the builder
      */
-    public OssRequestBuilder newFileBody(File file) {
+    public OssRequestBuilder newFileBody(Path file) {
         this.fileBody = new FileBody(file);
-        return this;
-    }
-
-    /**
-     * New path body.
-     *
-     * @param path the path
-     * @return the builder
-     */
-    public OssRequestBuilder newPathBody(Path path) {
-        this.pathBody = new PathBody(path);
         return this;
     }
 
@@ -132,12 +132,12 @@ public class OssRequestBuilder {
     public OssHttpRequest build() {
         return new OssHttpRequest(ossHttpMethod,
                 url,
+                cookies,
                 headers,
                 parameters,
                 formBody,
                 simpleBody,
                 fileBody,
-                pathBody,
                 byteBufferBody
         );
     }
@@ -188,6 +188,7 @@ public class OssRequestBuilder {
         private SimpleBodyBuilder(OssRequestBuilder ossRequestBuilder, String contentType) {
             this.ossRequestBuilder = ossRequestBuilder;
             this.contentType = contentType;
+            this.ossRequestBuilder.headers.set(CONTENT_TYPE.getValue(), contentType);
         }
 
         /**

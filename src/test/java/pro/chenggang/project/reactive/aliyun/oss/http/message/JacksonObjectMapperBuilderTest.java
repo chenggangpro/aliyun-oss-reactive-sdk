@@ -1,4 +1,4 @@
-package pro.chenggang.project.reactive.aliyun.oss.http.support;
+package pro.chenggang.project.reactive.aliyun.oss.http.message;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonInclude;

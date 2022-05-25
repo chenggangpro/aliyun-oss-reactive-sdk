@@ -6,7 +6,6 @@ import pro.chenggang.project.reactive.aliyun.oss.entity.http.OssHttpRequest;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.lang.reflect.Type;
 import java.nio.ByteBuffer;
 import java.util.function.Function;
 
@@ -20,14 +19,12 @@ import java.util.function.Function;
 public interface OssHttpClient {
 
     /**
-     * Exchange to mono with type reference.
+     * Exchange to mono string.
      *
-     * @param <T>                  the type parameter
-     * @param ossHttpRequest       the oss http request
-     * @param elementTypeReference the element type reference
+     * @param ossHttpRequest the oss http request
      * @return the mono
      */
-    <T> Mono<T> exchangeToMono(OssHttpRequest ossHttpRequest, TypeReference<? extends T> elementTypeReference);
+    Mono<String> exchangeToString(OssHttpRequest ossHttpRequest);
 
     /**
      * Exchange to mono with target class.
@@ -37,41 +34,17 @@ public interface OssHttpClient {
      * @param elementClass   the element class
      * @return the mono
      */
-    default <T> Mono<T> exchangeToMono(OssHttpRequest ossHttpRequest, Class<? extends T> elementClass) {
-        return exchangeToMono(ossHttpRequest, new TypeReference<T>() {
-            @Override
-            public Type getType() {
-                return elementClass;
-            }
-        });
-    }
+    <T> Mono<T> exchangeToMono(OssHttpRequest ossHttpRequest, Class<T> elementClass);
 
     /**
-     * Exchange to flux with type reference.
+     * Exchange to mono with type reference.
      *
      * @param <T>                  the type parameter
      * @param ossHttpRequest       the oss http request
      * @param elementTypeReference the element type reference
-     * @return the flux
+     * @return the mono
      */
-    <T> Flux<T> exchangeToFlux(OssHttpRequest ossHttpRequest, TypeReference<? extends T> elementTypeReference);
-
-    /**
-     * Exchange to flux with target class.
-     *
-     * @param <T>            the type parameter
-     * @param ossHttpRequest the oss http request
-     * @param elementClass   the element class
-     * @return the flux
-     */
-    default <T> Flux<T> exchangeToFlux(OssHttpRequest ossHttpRequest, Class<? extends T> elementClass) {
-        return exchangeToFlux(ossHttpRequest, new TypeReference<T>() {
-            @Override
-            public Type getType() {
-                return elementClass;
-            }
-        });
-    }
+    <T> Mono<T> exchangeToMono(OssHttpRequest ossHttpRequest, TypeReference<T> elementTypeReference);
 
     /**
      * Exchange to ByteBuffer flux.

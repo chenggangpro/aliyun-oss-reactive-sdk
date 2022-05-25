@@ -34,7 +34,7 @@ public class ReactiveHttpClientConfiguration {
      * The http connection global response timeout.
      * Default is PT1M
      */
-    private Duration responseTimeout = Duration.ofMinutes(1);
+    private Duration responseTimeout = Duration.ofMinutes(5);
 
     /**
      * Pool configuration for Netty HttpClient

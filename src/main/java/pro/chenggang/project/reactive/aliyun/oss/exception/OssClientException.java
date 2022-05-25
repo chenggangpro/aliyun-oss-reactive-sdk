@@ -1,6 +1,7 @@
 package pro.chenggang.project.reactive.aliyun.oss.exception;
 
 import lombok.Getter;
+import lombok.ToString;
 
 /**
  * The base oss client exception
@@ -10,6 +11,7 @@ import lombok.Getter;
  * @since 1.0.0
  */
 @Getter
+@ToString
 public class OssClientException extends RuntimeException {
 
     private static final long serialVersionUID = 3640507403836147683L;

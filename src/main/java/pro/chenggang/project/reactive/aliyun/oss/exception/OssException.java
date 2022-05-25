@@ -3,6 +3,7 @@ package pro.chenggang.project.reactive.aliyun.oss.exception;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
+import lombok.ToString;
 
 /**
  * The base oss exception
@@ -12,6 +13,7 @@ import lombok.Getter;
  * @since 1.0.0
  */
 @Getter
+@ToString
 public class OssException extends RuntimeException {
 
     private static final long serialVersionUID = -634090785175445677L;

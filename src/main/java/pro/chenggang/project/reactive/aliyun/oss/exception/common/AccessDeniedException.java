@@ -3,6 +3,7 @@ package pro.chenggang.project.reactive.aliyun.oss.exception.common;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
+import lombok.ToString;
 import pro.chenggang.project.reactive.aliyun.oss.exception.OssException;
 
 /**
@@ -13,6 +14,7 @@ import pro.chenggang.project.reactive.aliyun.oss.exception.OssException;
  * @since 1.0.0
  */
 @Getter
+@ToString(callSuper = true)
 public class AccessDeniedException extends OssException {
 
     private static final long serialVersionUID = 354977138181040042L;

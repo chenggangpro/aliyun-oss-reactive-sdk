@@ -38,7 +38,7 @@ public class MultiValueMap<K, V> extends CaseInsensitiveLinkedMap<K, List<V>> {
      * @param value the value
      */
     public void add(K key, V value) {
-        List<V> values = super.computeIfAbsent(key, k -> new ArrayList<>(1));
+        List<V> values = super.computeIfAbsent(super.customKey(key), k -> new ArrayList<>(1));
         values.add(value);
     }
 
@@ -49,7 +49,7 @@ public class MultiValueMap<K, V> extends CaseInsensitiveLinkedMap<K, List<V>> {
      * @param values the values
      */
     public void addAll(K key, List<V> values) {
-        List<V> currentValues = super.computeIfAbsent(key, k -> new ArrayList<>(1));
+        List<V> currentValues = super.computeIfAbsent(super.customKey(key), k -> new ArrayList<>(1));
         currentValues.addAll(values);
     }
 

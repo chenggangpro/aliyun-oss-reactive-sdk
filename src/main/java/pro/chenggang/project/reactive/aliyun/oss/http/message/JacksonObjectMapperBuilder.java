@@ -46,6 +46,8 @@ public class JacksonObjectMapperBuilder {
     private final Map<Class<?>, JsonDeserializer<?>> deserializers = new LinkedHashMap<>();
     private final Map<PropertyAccessor, JsonAutoDetect.Visibility> visibilities = new LinkedHashMap<>();
     private final Map<Object, Boolean> features = new LinkedHashMap<>();
+    private final boolean createXmlMapper;
+    private final ClassLoader moduleClassLoader = getClass().getClassLoader();
     private DateFormat dateFormat;
     private Locale locale;
     private TimeZone timeZone;
@@ -56,8 +58,6 @@ public class JacksonObjectMapperBuilder {
     private FilterProvider filters;
     private HandlerInstantiator handlerInstantiator;
     private Boolean defaultUseWrapper = true;
-    private final boolean createXmlMapper;
-    private final ClassLoader moduleClassLoader = getClass().getClassLoader();
     private Consumer<ObjectMapper> configurer;
 
     /**
@@ -266,7 +266,7 @@ public class JacksonObjectMapperBuilder {
     /**
      * Shortcut for {@link MapperFeature#AUTO_DETECT_FIELDS} option.
      *
-     * @param autoDetectFields the auto detect fields
+     * @param autoDetectFields whether auto-detect fields
      * @return the jackson object mapper builder
      */
     public JacksonObjectMapperBuilder autoDetectFields(boolean autoDetectFields) {

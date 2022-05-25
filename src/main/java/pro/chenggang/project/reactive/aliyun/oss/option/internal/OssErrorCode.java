@@ -30,6 +30,10 @@ import pro.chenggang.project.reactive.aliyun.oss.exception.bucket.TooManyBuckets
 import pro.chenggang.project.reactive.aliyun.oss.exception.common.AccessDeniedException;
 import pro.chenggang.project.reactive.aliyun.oss.exception.common.InvalidArgumentException;
 
+import java.util.Map;
+import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
+
 /**
  * OSS Server side error code.
  */
@@ -324,4 +328,29 @@ public enum OssErrorCode {
 //    static final String FILE_ALREADY_EXISTS = "FileAlreadyExists";
 
 
+    /**
+     * value of by error code
+     * @param errorCode the error code
+     * @return the optional OssErrorCode
+     */
+    public static Optional<OssErrorCode> valueOfErrorCode(String errorCode){
+        return Optional
+                .ofNullable(errorCode)
+                .filter(code -> !code.isEmpty())
+                .map(InstanceHolder.INSTANCE_CONTAINER::get);
+    }
+
+    /**
+     * OssErrorCode Instance Holder
+     */
+    private static class InstanceHolder {
+
+        private static final Map<String,OssErrorCode> INSTANCE_CONTAINER = new ConcurrentHashMap<>();
+
+        static {
+            for (OssErrorCode value : OssErrorCode.values()) {
+                INSTANCE_CONTAINER.put(value.getValue(),value);
+            }
+        }
+    }
 }

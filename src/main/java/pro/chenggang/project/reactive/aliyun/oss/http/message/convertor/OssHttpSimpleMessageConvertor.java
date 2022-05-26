@@ -22,11 +22,11 @@ public interface OssHttpSimpleMessageConvertor {
     /**
      * Convert request body to string.
      *
-     * @param bodyData    the body data
      * @param contentType the content type
+     * @param requestBodyData    the body data
      * @return the string
      */
-    String convertRequestBody(Object bodyData, String contentType);
+    String convertRequestBody(String contentType, Object requestBodyData);
 
     /**
      * Convert response data to target element type.

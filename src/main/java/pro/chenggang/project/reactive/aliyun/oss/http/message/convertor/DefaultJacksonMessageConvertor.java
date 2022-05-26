@@ -33,7 +33,7 @@ public class DefaultJacksonMessageConvertor implements JacksonMessageConvertor {
     }
 
     @Override
-    public JsonNode convertResponse(String responseData, String contentType) {
+    public JsonNode convertResponse(String contentType, String responseData) {
         if (StrUtil.startWith(contentType, JSON.getValue())) {
             try {
                 return this.jsonObjectMapper.readTree(responseData);
@@ -52,17 +52,17 @@ public class DefaultJacksonMessageConvertor implements JacksonMessageConvertor {
     }
 
     @Override
-    public <T> T convertResponse(String contentType, JsonNode jsonNode, Class<T> elementType) {
+    public <T> T convertResponse(String contentType, JsonNode responseData, Class<T> elementType) {
         if (StrUtil.startWith(contentType, JSON.getValue())) {
             try {
-                return this.jsonObjectMapper.treeToValue(jsonNode, elementType);
+                return this.jsonObjectMapper.treeToValue(responseData, elementType);
             } catch (Exception e) {
                 throw new SerializeFailedException(e);
             }
         }
         if (StrUtil.startWith(contentType, XML.getValue()) || StrUtil.startWith(contentType, TEXT_XML.getValue())) {
             try {
-                return this.xmlObjectMapper.treeToValue(jsonNode, elementType);
+                return this.xmlObjectMapper.treeToValue(responseData, elementType);
             } catch (Exception e) {
                 throw new SerializeFailedException(e);
             }

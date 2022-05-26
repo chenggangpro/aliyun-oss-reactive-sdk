@@ -163,7 +163,7 @@ public class DefaultOssHttpClient implements OssHttpClient {
         return (Mono<T>) byteBufFlux.aggregate()
                 .asString(UTF_8)
                 .filter(StrUtil::isNotBlank)
-                .map(responseBody -> jacksonMessageConvertor.convertResponse(responseBody, contentType))
+                .map(responseBody -> jacksonMessageConvertor.convertResponse(contentType, responseBody))
                 .flatMap(jsonNode -> Mono.error(ossHttpResponseErrorHandler.handleErrorResponse(statusCode, responseHeaders, jsonNode)))
                 .switchIfEmpty(Mono.error(ossHttpResponseErrorHandler.handleErrorResponse(statusCode, responseHeaders)));
     }
@@ -182,7 +182,7 @@ public class DefaultOssHttpClient implements OssHttpClient {
             Object bodyData = ossHttpRequest.getSimpleBody().getBodyData();
             return requestSender
                     .send(ByteBufFlux.fromString(Mono.just(this.ossHttpSimpleMessageConvertor
-                                    .convertRequestBody(bodyData, ossHttpRequest.getContentType()))
+                                    .convertRequestBody(ossHttpRequest.getContentType(), bodyData))
                             )
                     )
                     .response(receiver);

@@ -7,18 +7,13 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import pro.chenggang.project.reactive.aliyun.oss.entity.http.MultiValueMap;
 import pro.chenggang.project.reactive.aliyun.oss.exception.OssException;
 import pro.chenggang.project.reactive.aliyun.oss.exception.common.HttpStatusErrorOssException;
 import pro.chenggang.project.reactive.aliyun.oss.exception.common.UnidentifiedOssException;
 import pro.chenggang.project.reactive.aliyun.oss.http.message.convertor.DefaultJacksonMessageConvertor;
-import pro.chenggang.project.reactive.aliyun.oss.http.message.convertor.JacksonMessageConvertor;
 
 import static cn.hutool.http.Header.CONTENT_TYPE;
-import static org.mockito.Mockito.*;
 
 /**
  * @author evans
@@ -63,7 +58,7 @@ class DefaultOssHttpResponseErrorHandlerTest {
 
     @Test
     void testHandleErrorResponse2() {
-        JsonNode jsonNode = DefaultJacksonMessageConvertor.getInstance().convertResponse(this.xml, ContentType.XML.getValue());
+        JsonNode jsonNode = DefaultJacksonMessageConvertor.getInstance().convertResponse(ContentType.XML.getValue(), this.xml);
         DefaultOssHttpResponseErrorHandler defaultOssHttpResponseErrorHandler = new DefaultOssHttpResponseErrorHandler();
         MultiValueMap<String, String> headers = new MultiValueMap<>();
         headers.add(CONTENT_TYPE.getValue(),ContentType.XML.getValue());
@@ -73,7 +68,7 @@ class DefaultOssHttpResponseErrorHandlerTest {
         Assertions.assertTrue(ossException instanceof UnidentifiedOssException);
         ossException = defaultOssHttpResponseErrorHandler.handleErrorResponse(0, headers, new ObjectNode(JsonNodeFactory.instance));
         Assertions.assertTrue(ossException instanceof UnidentifiedOssException);
-        JsonNode errorJsonNode = DefaultJacksonMessageConvertor.getInstance().convertResponse(this.errorXml, ContentType.XML.getValue());
+        JsonNode errorJsonNode = DefaultJacksonMessageConvertor.getInstance().convertResponse(ContentType.XML.getValue(), this.errorXml);
         ossException = defaultOssHttpResponseErrorHandler.handleErrorResponse(0, headers, errorJsonNode);
         Assertions.assertTrue(ossException instanceof UnidentifiedOssException);
     }

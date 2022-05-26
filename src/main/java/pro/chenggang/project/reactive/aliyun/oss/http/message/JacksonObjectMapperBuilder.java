@@ -340,7 +340,7 @@ public class JacksonObjectMapperBuilder {
      * @param defaultUseWrapper the default use wrapper
      * @return the jackson object mapper builder
      */
-    public JacksonObjectMapperBuilder defaultUseWrapper(boolean defaultUseWrapper) {
+    public JacksonObjectMapperBuilder defaultUseWrapper(Boolean defaultUseWrapper) {
         this.defaultUseWrapper = defaultUseWrapper;
         return this;
     }

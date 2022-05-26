@@ -14,21 +14,21 @@ public interface JacksonMessageConvertor {
     /**
      * Convert json response to JsonNode.
      *
-     * @param responseData the response data
      * @param contentType  the content type
+     * @param responseData the response data
      * @return the json object
      */
-    JsonNode convertResponse(String responseData, String contentType);
+    JsonNode convertResponse(String contentType, String responseData);
 
     /**
      * Convert JsonNode to target type.
      *
      * @param <T>         the type parameter
      * @param contentType the content type
-     * @param jsonNode    the json node
+     * @param responseData    the json node
      * @param elementType the element type
      * @return the target type
      */
-    <T> T convertResponse(String contentType, JsonNode jsonNode, Class<T> elementType);
+    <T> T convertResponse(String contentType, JsonNode responseData, Class<T> elementType);
 
 }

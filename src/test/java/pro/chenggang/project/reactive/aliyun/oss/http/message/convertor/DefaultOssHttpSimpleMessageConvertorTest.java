@@ -7,6 +7,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import pro.chenggang.project.reactive.aliyun.oss.exception.client.SerializeFailedException;
 
+import java.lang.reflect.Type;
 import java.util.HashMap;
 
 /**
@@ -58,15 +59,15 @@ class DefaultOssHttpSimpleMessageConvertorTest {
     @Test
     void testConvertRequestBody() {
         DefaultOssHttpSimpleMessageConvertor defaultOssHttpSimpleMessageConvertor = DefaultOssHttpSimpleMessageConvertor.getInstance();
-        String result = defaultOssHttpSimpleMessageConvertor.convertRequestBody(this.json, ContentType.JSON.getValue());
+        String result = defaultOssHttpSimpleMessageConvertor.convertRequestBody(ContentType.JSON.getValue(), this.json);
         Assertions.assertNotNull(result);
-        result = defaultOssHttpSimpleMessageConvertor.convertRequestBody(this.xml, ContentType.XML.getValue());
+        result = defaultOssHttpSimpleMessageConvertor.convertRequestBody(ContentType.XML.getValue(), this.xml);
         Assertions.assertNotNull(result);
-        result = defaultOssHttpSimpleMessageConvertor.convertRequestBody(this.xml, ContentType.TEXT_XML.getValue());
+        result = defaultOssHttpSimpleMessageConvertor.convertRequestBody(ContentType.TEXT_XML.getValue(), this.xml);
         Assertions.assertNotNull(result);
-        result = defaultOssHttpSimpleMessageConvertor.convertRequestBody(this.text, ContentType.TEXT_PLAIN.getValue());
+        result = defaultOssHttpSimpleMessageConvertor.convertRequestBody(ContentType.TEXT_PLAIN.getValue(), this.text);
         Assertions.assertNotNull(result);
-        Assertions.assertThrowsExactly(SerializeFailedException.class, () -> defaultOssHttpSimpleMessageConvertor.convertRequestBody(this.text, ContentType.OCTET_STREAM.getValue()));
+        Assertions.assertThrowsExactly(SerializeFailedException.class, () -> defaultOssHttpSimpleMessageConvertor.convertRequestBody(ContentType.OCTET_STREAM.getValue(), this.text));
     }
 
     @Test
@@ -99,4 +100,23 @@ class DefaultOssHttpSimpleMessageConvertorTest {
         Assertions.assertThrowsExactly(SerializeFailedException.class, () -> defaultOssHttpSimpleMessageConvertor.convertResponse(ContentType.OCTET_STREAM.getValue(), this.text,new TypeReference<HashMap>() {}));
     }
 
+    @Test
+    void testConvertResponseError() {
+        DefaultOssHttpSimpleMessageConvertor defaultOssHttpSimpleMessageConvertor = DefaultOssHttpSimpleMessageConvertor.getInstance();
+        Assertions.assertThrows(SerializeFailedException.class,() -> defaultOssHttpSimpleMessageConvertor.convertResponse(ContentType.JSON.getValue(),"\\{\\?ssdf@!:33<{{",  HashMap.class));
+        Assertions.assertThrows(SerializeFailedException.class,() -> defaultOssHttpSimpleMessageConvertor.convertResponse(ContentType.XML.getValue(),"\\{\\?ssdf@!:33<{{",  HashMap.class));
+        Assertions.assertThrows(SerializeFailedException.class,() -> defaultOssHttpSimpleMessageConvertor.convertResponse(ContentType.JSON.getValue(),"\\{\\?ssdf@!:33<{{",  new TypeReference<HashMap>() {}));
+        Assertions.assertThrows(SerializeFailedException.class,() -> defaultOssHttpSimpleMessageConvertor.convertResponse(ContentType.XML.getValue(),"\\{\\?ssdf@!:33<{{",  new TypeReference<HashMap>() {}));
+        Assertions.assertThrows(SerializeFailedException.class,() -> defaultOssHttpSimpleMessageConvertor.convertRequestBody(ContentType.JSON.getValue(), errorType()));
+        Assertions.assertThrows(SerializeFailedException.class,() -> defaultOssHttpSimpleMessageConvertor.convertRequestBody(ContentType.XML.getValue(), errorType()));
+    }
+
+    private Object errorType(){
+        return new TypeReference<String>() {
+            @Override
+            public Type getType() {
+                throw new RuntimeException();
+            }
+        };
+    }
 }

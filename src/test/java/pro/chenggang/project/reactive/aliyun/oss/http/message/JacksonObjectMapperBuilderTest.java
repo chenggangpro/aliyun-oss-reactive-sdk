@@ -3,21 +3,33 @@ package pro.chenggang.project.reactive.aliyun.oss.http.message;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
+import com.fasterxml.jackson.core.JacksonException;
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.databind.DeserializationConfig;
+import com.fasterxml.jackson.databind.DeserializationContext;
+import com.fasterxml.jackson.databind.JsonDeserializer;
+import com.fasterxml.jackson.databind.JsonSerializer;
+import com.fasterxml.jackson.databind.KeyDeserializer;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
+import com.fasterxml.jackson.databind.SerializationConfig;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.SerializerProvider;
+import com.fasterxml.jackson.databind.cfg.HandlerInstantiator;
+import com.fasterxml.jackson.databind.cfg.MapperConfig;
 import com.fasterxml.jackson.databind.deser.std.NumberDeserializers;
+import com.fasterxml.jackson.databind.introspect.Annotated;
 import com.fasterxml.jackson.databind.introspect.NopAnnotationIntrospector;
+import com.fasterxml.jackson.databind.jsontype.TypeIdResolver;
+import com.fasterxml.jackson.databind.jsontype.TypeResolverBuilder;
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 import com.fasterxml.jackson.databind.ser.std.DateSerializer;
-import com.fasterxml.jackson.databind.ser.std.NumberSerializer;
-import com.fasterxml.jackson.databind.ser.std.NumberSerializers;
-import com.fasterxml.jackson.databind.ser.std.StdArraySerializers;
 import com.fasterxml.jackson.dataformat.xml.XmlTypeResolverBuilder;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import pro.chenggang.project.reactive.aliyun.oss.http.message.JacksonObjectMapperBuilder;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.util.Date;
@@ -35,169 +47,264 @@ class JacksonObjectMapperBuilderTest {
 
     @Test
     void testJson() {
-        JacksonObjectMapperBuilder result = JacksonObjectMapperBuilder.json();
+        ObjectMapper result = JacksonObjectMapperBuilder.json()
+                .build();
         Assertions.assertNotNull(result);
     }
 
     @Test
     void testXml() {
-        JacksonObjectMapperBuilder result = JacksonObjectMapperBuilder.xml();
+        ObjectMapper result = JacksonObjectMapperBuilder.xml()
+                .defaultUseWrapper(null)
+                .build();
         Assertions.assertNotNull(result);
     }
 
     @Test
     void testDateFormat() {
-        JacksonObjectMapperBuilder result = jacksonObjectMapperBuilder.dateFormat(DateFormat.getInstance());
+        ObjectMapper result = jacksonObjectMapperBuilder.dateFormat(DateFormat.getInstance()).build();
         Assertions.assertNotNull(result);
     }
 
     @Test
     void testSimpleDateFormat() {
-        JacksonObjectMapperBuilder result = jacksonObjectMapperBuilder.simpleDateFormat("yyyy-MM-dd");
+        ObjectMapper result = jacksonObjectMapperBuilder.simpleDateFormat("yyyy-MM-dd").build();
         Assertions.assertNotNull(result);
     }
 
     @Test
     void testLocale() {
-        JacksonObjectMapperBuilder result = jacksonObjectMapperBuilder.locale(Locale.getDefault());
+        ObjectMapper result = jacksonObjectMapperBuilder.locale(Locale.getDefault()).build();
         Assertions.assertNotNull(result);
     }
 
     @Test
     void testTimeZone() {
-        JacksonObjectMapperBuilder result = jacksonObjectMapperBuilder.timeZone(TimeZone.getDefault());
+        ObjectMapper result = jacksonObjectMapperBuilder.timeZone(TimeZone.getDefault()).build();
         Assertions.assertNotNull(result);
     }
 
     @Test
     void testAnnotationIntrospector() {
-        JacksonObjectMapperBuilder result = jacksonObjectMapperBuilder.annotationIntrospector(NopAnnotationIntrospector.instance);
+        ObjectMapper result = jacksonObjectMapperBuilder.annotationIntrospector(NopAnnotationIntrospector.instance).build();
         Assertions.assertNotNull(result);
     }
 
     @Test
     void testPropertyNamingStrategy() {
-        JacksonObjectMapperBuilder result = jacksonObjectMapperBuilder.propertyNamingStrategy(PropertyNamingStrategy.LOWER_CAMEL_CASE);
+        ObjectMapper result = jacksonObjectMapperBuilder.propertyNamingStrategy(PropertyNamingStrategy.LOWER_CAMEL_CASE).build();
         Assertions.assertNotNull(result);
     }
 
     @Test
     void testDefaultTyping() {
-        JacksonObjectMapperBuilder result = jacksonObjectMapperBuilder.defaultTyping(XmlTypeResolverBuilder.noTypeInfoBuilder());
+        ObjectMapper result = jacksonObjectMapperBuilder.defaultTyping(XmlTypeResolverBuilder.noTypeInfoBuilder()).build();
         Assertions.assertNotNull(result);
     }
 
     @Test
     void testSerializationInclusion() {
-        JacksonObjectMapperBuilder result = jacksonObjectMapperBuilder.serializationInclusion(JsonInclude.Include.ALWAYS);
-        Assertions.assertNotNull( result);
+        ObjectMapper result = jacksonObjectMapperBuilder.serializationInclusion(JsonInclude.Include.ALWAYS).build();
+        Assertions.assertNotNull(result);
     }
 
     @Test
     void testSerializationInclusion2() {
-        JacksonObjectMapperBuilder result = jacksonObjectMapperBuilder.serializationInclusion(JsonInclude.Value.empty());
+        ObjectMapper result = jacksonObjectMapperBuilder.serializationInclusion(JsonInclude.Value.empty()).build();
         Assertions.assertNotNull(result);
     }
 
     @Test
     void testFilters() {
-        JacksonObjectMapperBuilder result = jacksonObjectMapperBuilder.filters(new SimpleFilterProvider());
+        ObjectMapper result = jacksonObjectMapperBuilder.filters(new SimpleFilterProvider()).build();
         Assertions.assertNotNull(result);
     }
 
     @Test
     void testSerializers() {
-        JacksonObjectMapperBuilder result = jacksonObjectMapperBuilder.serializers(new DateSerializer());
+        ObjectMapper result = jacksonObjectMapperBuilder.serializers(new DateSerializer()).build();
         Assertions.assertNotNull(result);
+        Assertions.assertThrows(IllegalArgumentException.class,()->{
+            jacksonObjectMapperBuilder.serializers(new JsonSerializer(){
+                        @Override
+                        public Class handledType() {
+                            return null;
+                        }
+
+                        @Override
+                        public void serialize(Object value, JsonGenerator gen, SerializerProvider serializers) throws IOException {
+
+                        }
+                    })
+                    .build();
+        });
+        Assertions.assertThrows(IllegalArgumentException.class,()->{
+            jacksonObjectMapperBuilder.serializers(new JsonSerializer(){
+                        @Override
+                        public Class handledType() {
+                            return Object.class;
+                        }
+
+                        @Override
+                        public void serialize(Object value, JsonGenerator gen, SerializerProvider serializers) throws IOException {
+
+                        }
+                    })
+                    .build();
+        });
     }
 
     @Test
     void testSerializerByType() {
-        JacksonObjectMapperBuilder result = jacksonObjectMapperBuilder.serializerByType(Date.class, new DateSerializer());
+        ObjectMapper result = jacksonObjectMapperBuilder.serializerByType(Date.class, new DateSerializer()).build();
         Assertions.assertNotNull(result);
     }
 
     @Test
     void testDeserializers() {
-        JacksonObjectMapperBuilder result = jacksonObjectMapperBuilder.deserializers(new NumberDeserializers.BigDecimalDeserializer());
+        ObjectMapper result = jacksonObjectMapperBuilder.deserializers(new NumberDeserializers.BigDecimalDeserializer()).build();
         Assertions.assertNotNull(result);
+        Assertions.assertThrows(IllegalArgumentException.class,()->{
+            jacksonObjectMapperBuilder.deserializers(new JsonDeserializer(){
+                        @Override
+                        public Object deserialize(JsonParser p, DeserializationContext ctxt) throws IOException, JacksonException {
+                            return null;
+                        }
+
+                        @Override
+                        public Class handledType() {
+                            return null;
+                        }
+                    })
+                    .build();
+        });
+        Assertions.assertThrows(IllegalArgumentException.class,()->{
+            jacksonObjectMapperBuilder.deserializers(new JsonDeserializer(){
+
+                        @Override
+                        public Class handledType() {
+                            return Object.class;
+                        }
+
+                        @Override
+                        public Object deserialize(JsonParser p, DeserializationContext ctxt) throws IOException, JacksonException {
+                            return null;
+                        }
+                    })
+                    .build();
+        });
     }
 
     @Test
     void testDeserializerByType() {
-        JacksonObjectMapperBuilder result = jacksonObjectMapperBuilder.deserializerByType(null, null);
+        ObjectMapper result = jacksonObjectMapperBuilder.deserializerByType(BigDecimal.class, new NumberDeserializers.BigDecimalDeserializer()).build();
         Assertions.assertNotNull(result);
     }
 
     @Test
     void testAutoDetectFields() {
-        JacksonObjectMapperBuilder result = jacksonObjectMapperBuilder.autoDetectFields(true);
+        ObjectMapper result = jacksonObjectMapperBuilder.autoDetectFields(true).build();
         Assertions.assertNotNull(result);
     }
 
     @Test
     void testAutoDetectGettersSetters() {
-        JacksonObjectMapperBuilder result = jacksonObjectMapperBuilder.autoDetectGettersSetters(true);
+        ObjectMapper result = jacksonObjectMapperBuilder.autoDetectGettersSetters(true).build();
         Assertions.assertNotNull(result);
     }
 
     @Test
     void testDefaultViewInclusion() {
-        JacksonObjectMapperBuilder result = jacksonObjectMapperBuilder.defaultViewInclusion(true);
+        ObjectMapper result = jacksonObjectMapperBuilder.defaultViewInclusion(true).build();
         Assertions.assertNotNull(result);
     }
 
     @Test
     void testFailOnUnknownProperties() {
-        JacksonObjectMapperBuilder result = jacksonObjectMapperBuilder.failOnUnknownProperties(true);
+        ObjectMapper result = jacksonObjectMapperBuilder.failOnUnknownProperties(true).build();
         Assertions.assertNotNull(result);
     }
 
     @Test
     void testFailOnEmptyBeans() {
-        JacksonObjectMapperBuilder result = jacksonObjectMapperBuilder.failOnEmptyBeans(true);
+        ObjectMapper result = jacksonObjectMapperBuilder.failOnEmptyBeans(true).build();
         Assertions.assertNotNull(result);
     }
 
     @Test
     void testIndentOutput() {
-        JacksonObjectMapperBuilder result = jacksonObjectMapperBuilder.indentOutput(true);
+        ObjectMapper result = jacksonObjectMapperBuilder.indentOutput(true).build();
         Assertions.assertNotNull(result);
     }
 
     @Test
     void testDefaultUseWrapper() {
-        JacksonObjectMapperBuilder result = jacksonObjectMapperBuilder.defaultUseWrapper(true);
+        ObjectMapper result = jacksonObjectMapperBuilder.defaultUseWrapper(true).build();
         Assertions.assertNotNull(result);
     }
 
     @Test
     void testVisibility() {
-        JacksonObjectMapperBuilder result = jacksonObjectMapperBuilder.visibility(PropertyAccessor.GETTER, JsonAutoDetect.Visibility.ANY);
+        ObjectMapper result = jacksonObjectMapperBuilder.visibility(PropertyAccessor.GETTER, JsonAutoDetect.Visibility.ANY).build();
         Assertions.assertNotNull(result);
     }
 
     @Test
     void testFeaturesToEnable() {
-        JacksonObjectMapperBuilder result = jacksonObjectMapperBuilder.featuresToEnable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
+        ObjectMapper result = jacksonObjectMapperBuilder.featuresToEnable(SerializationFeature.FAIL_ON_EMPTY_BEANS)
+                .featuresToEnable(JsonParser.Feature.ALLOW_COMMENTS)
+                .featuresToEnable(JsonGenerator.Feature.FLUSH_PASSED_TO_STREAM)
+                .build();
         Assertions.assertNotNull(result);
+        Assertions.assertThrows(IllegalStateException.class,() -> {
+            jacksonObjectMapperBuilder.featuresToEnable(SerializationFeature.FAIL_ON_EMPTY_BEANS)
+                    .featuresToEnable(new Object())
+                    .build();
+        });
     }
 
     @Test
     void testFeaturesToDisable() {
-        JacksonObjectMapperBuilder result = jacksonObjectMapperBuilder.featuresToDisable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
+        ObjectMapper result = jacksonObjectMapperBuilder.featuresToDisable(SerializationFeature.FAIL_ON_EMPTY_BEANS).build();
         Assertions.assertNotNull(result);
     }
 
     @Test
     void testHandlerInstantiator() {
-        JacksonObjectMapperBuilder result = jacksonObjectMapperBuilder.handlerInstantiator(null);
+        ObjectMapper result = jacksonObjectMapperBuilder.handlerInstantiator(new HandlerInstantiator() {
+            @Override
+            public JsonDeserializer<?> deserializerInstance(DeserializationConfig config, Annotated annotated, Class<?> deserClass) {
+                return null;
+            }
+
+            @Override
+            public KeyDeserializer keyDeserializerInstance(DeserializationConfig config, Annotated annotated, Class<?> keyDeserClass) {
+                return null;
+            }
+
+            @Override
+            public JsonSerializer<?> serializerInstance(SerializationConfig config, Annotated annotated, Class<?> serClass) {
+                return null;
+            }
+
+            @Override
+            public TypeResolverBuilder<?> typeResolverBuilderInstance(MapperConfig<?> config, Annotated annotated, Class<?> builderClass) {
+                return null;
+            }
+
+            @Override
+            public TypeIdResolver typeIdResolverInstance(MapperConfig<?> config, Annotated annotated, Class<?> resolverClass) {
+                return null;
+            }
+        }).build();
         Assertions.assertNotNull(result);
     }
 
     @Test
     void testPostConfigurer() {
-        JacksonObjectMapperBuilder result = jacksonObjectMapperBuilder.postConfigurer(objectMapper -> {});
+        ObjectMapper result = jacksonObjectMapperBuilder.postConfigurer(objectMapper -> {})
+                .postConfigurer(objectMapper -> {})
+                .build();
         Assertions.assertNotNull(result);
     }
 

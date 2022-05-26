@@ -44,25 +44,25 @@ public class DefaultOssHttpSimpleMessageConvertor implements OssHttpSimpleMessag
     }
 
     @Override
-    public String convertRequestBody(Object bodyData, String contentType) {
+    public String convertRequestBody(String contentType, Object requestBodyData) {
         if (!supportContentType(contentType)) {
             throw new SerializeFailedException("Could not convert body data with [" + contentType + "]");
         }
         if (StrUtil.startWith(contentType, JSON.getValue())) {
             try {
-                return this.jsonObjectMapper.writeValueAsString(bodyData);
+                return this.jsonObjectMapper.writeValueAsString(requestBodyData);
             } catch (Exception e) {
                 throw new SerializeFailedException(e);
             }
         }
         if (StrUtil.startWith(contentType, XML.getValue()) || StrUtil.equals(contentType, TEXT_XML.getValue())) {
             try {
-                return this.xmlObjectMapper.writeValueAsString(bodyData);
+                return this.xmlObjectMapper.writeValueAsString(requestBodyData);
             } catch (Exception e) {
                 throw new SerializeFailedException(e);
             }
         }
-        return bodyData.toString();
+        return requestBodyData.toString();
     }
 
     @SuppressWarnings("unchecked")

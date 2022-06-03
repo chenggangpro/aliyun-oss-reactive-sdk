@@ -44,9 +44,9 @@
         <assertj.version>3.22.0</assertj.version>
         <hamcrest.version>2.2</hamcrest.version>
         <jackson.version>2.13.3</jackson.version>
-        <lombok.version>1.18.14</lombok.version>
+        <lombok.version>1.18.24</lombok.version>
         <mockito-junit-jupiter.version>4.5.1</mockito-junit-jupiter.version>
-        <easy-random-junit5-extension.version>0.2.0</easy-random-junit5-extension.version>
+        <easy-random-junit5-extension.version>0.3.0</easy-random-junit5-extension.version>
         <hutool-all.version>5.8.2</hutool-all.version>
         <logback.version>1.2.11</logback.version>
     </properties>
@@ -138,7 +138,6 @@
         <dependency>
             <groupId>org.mvnsearch</groupId>
             <artifactId>easy-random-junit5-extension</artifactId>
-            <scope>test</scope>
         </dependency>
 
     </dependencies>

@@ -53,6 +53,17 @@ public class DefaultOssHttpClientBuilder {
     }
 
     /**
+     * Add http client customizer .
+     *
+     * @param httpClientCustomizers the http client customizers
+     * @return the DefaultOssHttpClientBuilder
+     */
+    public DefaultOssHttpClientBuilder addHttpClientCustomizer(List<HttpClientCustomizer> httpClientCustomizers) {
+        this.httpClientCustomizers.addAll(httpClientCustomizers);
+        return this;
+    }
+
+    /**
      * With oss http simple message convertor.
      *
      * @param ossHttpSimpleMessageConvertor the oss http simple message convertor

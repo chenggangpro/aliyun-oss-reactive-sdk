@@ -1,8 +1,10 @@
 package pro.chenggang.project.reactive.aliyun.oss.configuration;
 
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import pro.chenggang.project.reactive.aliyun.oss.auth.manager.CredentialsProviderManager;
 
 import java.time.Duration;
 
@@ -16,23 +18,24 @@ import java.time.Duration;
 @Getter
 @Setter
 @ToString
+@RequiredArgsConstructor
 public class ReactiveOssConfiguration {
 
     /**
      * The response timeout when oss download file
      * Default is PT1M
      */
-    private Duration downloadResponseTimeout = Duration.ofMinutes(1);
+    private final Duration downloadResponseTimeout;
 
     /**
      * The response timeout when oss upload file
      * Default is PT1M
      */
-    private Duration uploadResponseTimeout = Duration.ofMinutes(1);
+    private final Duration uploadResponseTimeout;
 
     /**
-     * The oss endpoint
+     * The credentials provider manager
      */
-    private String endpoint;
+    private final CredentialsProviderManager credentialsProviderManager;
 
 }

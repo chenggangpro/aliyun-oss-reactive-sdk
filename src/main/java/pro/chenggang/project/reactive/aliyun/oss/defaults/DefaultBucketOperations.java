@@ -1,9 +1,15 @@
 package pro.chenggang.project.reactive.aliyun.oss.defaults;
 
+import lombok.RequiredArgsConstructor;
 import pro.chenggang.project.reactive.aliyun.oss.BucketOperations;
+import pro.chenggang.project.reactive.aliyun.oss.auth.AbstractSwitchableCredentialsOperation;
+import pro.chenggang.project.reactive.aliyun.oss.auth.manager.CredentialsProviderManager;
+import pro.chenggang.project.reactive.aliyun.oss.configuration.ReactiveOssConfiguration;
+import pro.chenggang.project.reactive.aliyun.oss.entity.auth.Credentials;
 import pro.chenggang.project.reactive.aliyun.oss.entity.model.bucket.AccessControlPolicy;
 import pro.chenggang.project.reactive.aliyun.oss.entity.model.bucket.Bucket;
 import pro.chenggang.project.reactive.aliyun.oss.entity.model.bucket.BucketListResult;
+import pro.chenggang.project.reactive.aliyun.oss.http.OssHttpClient;
 import pro.chenggang.project.reactive.aliyun.oss.option.external.AccessControlList;
 import pro.chenggang.project.reactive.aliyun.oss.option.external.DataRedundancyType;
 import pro.chenggang.project.reactive.aliyun.oss.option.external.StorageClass;
@@ -17,7 +23,18 @@ import reactor.core.publisher.Mono;
  * @since 1.0.0
  * //TODO unfinished
  */
-public class DefaultBucketOperations implements BucketOperations {
+@RequiredArgsConstructor
+class DefaultBucketOperations extends AbstractSwitchableCredentialsOperation implements BucketOperations {
+
+    private final ReactiveOssConfiguration reactiveOssConfiguration;
+    private final OssHttpClient ossHttpClient;
+
+    @Override
+    public Mono<Credentials> getCredentials(String credentialsIdentity) {
+        CredentialsProviderManager credentialsProviderManager = this.reactiveOssConfiguration.getCredentialsProviderManager();
+        return Mono.justOrEmpty(credentialsProviderManager.getCredentialsProvider(credentialsIdentity))
+                .flatMap(credentialsProvider -> credentialsProvider.getCredentials(credentialsIdentity));
+    }
 
     @Override
     public Mono<BucketListResult> listBuckets(String prefix, String marker, Integer maxKeys) {

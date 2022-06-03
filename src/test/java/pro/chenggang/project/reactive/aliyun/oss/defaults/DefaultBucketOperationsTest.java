@@ -1,15 +1,24 @@
 package pro.chenggang.project.reactive.aliyun.oss.defaults;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import pro.chenggang.project.reactive.aliyun.oss.auth.manager.DefaultCredentialsProviderManager;
+import pro.chenggang.project.reactive.aliyun.oss.auth.provider.SingleCredentialsProvider;
+import pro.chenggang.project.reactive.aliyun.oss.configuration.ReactiveHttpClientConfiguration;
+import pro.chenggang.project.reactive.aliyun.oss.configuration.ReactiveOssConfiguration;
 import pro.chenggang.project.reactive.aliyun.oss.entity.model.bucket.AccessControlPolicy;
 import pro.chenggang.project.reactive.aliyun.oss.entity.model.bucket.Bucket;
 import pro.chenggang.project.reactive.aliyun.oss.entity.model.bucket.BucketListResult;
+import pro.chenggang.project.reactive.aliyun.oss.http.OssHttpClient;
+import pro.chenggang.project.reactive.aliyun.oss.http.defaults.DefaultOssHttpClientBuilder;
 import pro.chenggang.project.reactive.aliyun.oss.option.external.AccessControlList;
 import pro.chenggang.project.reactive.aliyun.oss.option.external.DataRedundancyType;
 import pro.chenggang.project.reactive.aliyun.oss.option.external.StorageClass;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
+
+import java.time.Duration;
 
 /**
  * DefaultBucketOperationsTest
@@ -20,7 +29,24 @@ import reactor.test.StepVerifier;
  */
 class DefaultBucketOperationsTest {
 
-    DefaultBucketOperations defaultBucketOperations = new DefaultBucketOperations();
+    DefaultBucketOperations defaultBucketOperations;
+
+    @BeforeEach
+    void setup(){
+        ReactiveHttpClientConfiguration reactiveHttpClientConfiguration = new ReactiveHttpClientConfiguration();
+        OssHttpClient ossHttpClient = DefaultOssHttpClientBuilder.newBuilder(reactiveHttpClientConfiguration).build();
+        DefaultCredentialsProviderManager defaultCredentialsProviderManager = new DefaultCredentialsProviderManager();
+        defaultCredentialsProviderManager.setDefaultCredentialsProvider(new SingleCredentialsProvider("x","x","x"));
+        ReactiveOssConfiguration reactiveOssConfiguration = new ReactiveOssConfiguration(Duration.ofMinutes(1), Duration.ofMillis(1), defaultCredentialsProviderManager);
+        this.defaultBucketOperations = new DefaultBucketOperations(reactiveOssConfiguration,ossHttpClient);
+    }
+
+    @Test
+    void testGetCredentials(){
+        StepVerifier.create(defaultBucketOperations.getCredentials("xx"))
+                .expectNextCount(1)
+                .verifyComplete();
+    }
 
     @Test
     void testListBuckets() {

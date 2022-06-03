@@ -15,12 +15,11 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import pro.chenggang.project.reactive.aliyun.oss.exception.client.SerializeFailedException;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 
 /**
- * @author evans
+ * @author Gang Cheng
  * @version 1.0.0
  * @since 1.0.0
  */
@@ -193,12 +192,12 @@ class DefaultJacksonMessageConvertorTest {
             }
 
             @Override
-            public void serialize(JsonGenerator gen, SerializerProvider serializers) throws IOException {
+            public void serialize(JsonGenerator gen, SerializerProvider serializers) {
 
             }
 
             @Override
-            public void serializeWithType(JsonGenerator gen, SerializerProvider serializers, TypeSerializer typeSer) throws IOException {
+            public void serializeWithType(JsonGenerator gen, SerializerProvider serializers, TypeSerializer typeSer) {
 
             }
         };

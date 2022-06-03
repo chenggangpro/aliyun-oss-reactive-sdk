@@ -16,7 +16,7 @@ import pro.chenggang.project.reactive.aliyun.oss.http.message.convertor.DefaultJ
 import static cn.hutool.http.Header.CONTENT_TYPE;
 
 /**
- * @author evans
+ * @author Gang Cheng
  * @version 1.0.0
  * @since 1.0.0
  */

@@ -1,5 +1,6 @@
 package pro.chenggang.project.reactive.aliyun.oss;
 
+import pro.chenggang.project.reactive.aliyun.oss.auth.SwitchableCredentialsOperation;
 import pro.chenggang.project.reactive.aliyun.oss.entity.model.bucket.AccessControlPolicy;
 import pro.chenggang.project.reactive.aliyun.oss.entity.model.bucket.Bucket;
 import pro.chenggang.project.reactive.aliyun.oss.entity.model.bucket.BucketListResult;
@@ -27,7 +28,7 @@ import java.util.function.Function;
  * @author Gang Cheng
  * @since 1.0.0
  */
-public interface BucketOperations {
+public interface BucketOperations extends SwitchableCredentialsOperation {
 
     /**
      * Get all buckets which meet the conditions specified

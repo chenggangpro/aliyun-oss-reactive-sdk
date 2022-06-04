@@ -46,9 +46,10 @@
         <jackson.version>2.13.3</jackson.version>
         <lombok.version>1.18.24</lombok.version>
         <mockito-junit-jupiter.version>4.5.1</mockito-junit-jupiter.version>
-        <easy-random-junit5-extension.version>0.3.0</easy-random-junit5-extension.version>
+        <easy-random-junit5-extension.version>0.2.0</easy-random-junit5-extension.version>
         <hutool-all.version>5.8.2</hutool-all.version>
         <logback.version>1.2.11</logback.version>
+        <slf4j-api.version>1.7.36</slf4j-api.version>
     </properties>
 
     <dependencies>
@@ -111,6 +112,10 @@
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
         </dependency>
 
         <!--Test Scope-->
@@ -194,6 +199,11 @@
                 <groupId>ch.qos.logback</groupId>
                 <artifactId>logback-classic</artifactId>
                 <version>${logback.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-api</artifactId>
+                <version>${slf4j-api.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.mockito</groupId>

@@ -14,7 +14,6 @@ import pro.chenggang.project.reactive.aliyun.oss.entity.http.MultiValueMap;
 import pro.chenggang.project.reactive.aliyun.oss.http.message.JacksonObjectMapperBuilder;
 import reactor.core.Disposable;
 import reactor.core.publisher.Mono;
-import reactor.core.scheduler.Schedulers;
 import reactor.netty.http.server.HttpServer;
 import reactor.netty.http.server.HttpServerRequest;
 import reactor.netty.http.server.HttpServerResponse;
@@ -100,10 +99,7 @@ public class MockHttpServerTest {
                         .post(postData,this::registerPostData)
                         .post(postFile,this::registerPostFile)
                 )
-                .bind()
-                .publishOn(Schedulers.parallel())
-                .subscribeOn(Schedulers.parallel())
-                .subscribe();
+                .bindNow();
     }
 
     @AfterEach

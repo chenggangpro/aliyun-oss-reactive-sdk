@@ -2,6 +2,7 @@ package pro.chenggang.project.reactive.aliyun.oss.entity.auth;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.ToString;
 
 /**
  * The credentials context
@@ -10,6 +11,7 @@ import lombok.RequiredArgsConstructor;
  * @since 1.0.0
  */
 @Getter
+@ToString
 @RequiredArgsConstructor
 public class CredentialsContext {
 

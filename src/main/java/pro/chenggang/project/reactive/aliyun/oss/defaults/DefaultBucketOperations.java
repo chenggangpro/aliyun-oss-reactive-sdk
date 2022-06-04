@@ -5,7 +5,6 @@ import pro.chenggang.project.reactive.aliyun.oss.BucketOperations;
 import pro.chenggang.project.reactive.aliyun.oss.auth.AbstractSwitchableCredentialsOperation;
 import pro.chenggang.project.reactive.aliyun.oss.auth.manager.CredentialsProviderManager;
 import pro.chenggang.project.reactive.aliyun.oss.configuration.ReactiveOssConfiguration;
-import pro.chenggang.project.reactive.aliyun.oss.entity.auth.Credentials;
 import pro.chenggang.project.reactive.aliyun.oss.entity.model.bucket.AccessControlPolicy;
 import pro.chenggang.project.reactive.aliyun.oss.entity.model.bucket.Bucket;
 import pro.chenggang.project.reactive.aliyun.oss.entity.model.bucket.BucketListResult;
@@ -30,10 +29,8 @@ class DefaultBucketOperations extends AbstractSwitchableCredentialsOperation imp
     private final OssHttpClient ossHttpClient;
 
     @Override
-    public Mono<Credentials> getCredentials(String credentialsIdentity) {
-        CredentialsProviderManager credentialsProviderManager = this.reactiveOssConfiguration.getCredentialsProviderManager();
-        return Mono.justOrEmpty(credentialsProviderManager.getCredentialsProvider(credentialsIdentity))
-                .flatMap(credentialsProvider -> credentialsProvider.getCredentials(credentialsIdentity));
+    protected CredentialsProviderManager getCredentialsProviderManager() {
+        return this.reactiveOssConfiguration.getCredentialsProviderManager();
     }
 
     @Override

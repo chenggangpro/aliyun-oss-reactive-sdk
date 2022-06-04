@@ -43,7 +43,7 @@ class DefaultBucketOperationsTest {
 
     @Test
     void testGetCredentials(){
-        StepVerifier.create(defaultBucketOperations.getCredentials("xx"))
+        StepVerifier.create(defaultBucketOperations.getCredentials("xx",true))
                 .expectNextCount(1)
                 .verifyComplete();
     }

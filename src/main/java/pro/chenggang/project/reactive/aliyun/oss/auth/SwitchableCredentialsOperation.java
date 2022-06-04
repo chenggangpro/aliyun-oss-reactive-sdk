@@ -14,14 +14,38 @@ public interface SwitchableCredentialsOperation {
     /**
      * The constant CREDENTIALS_CONTEXT_KEY.
      */
-    String CREDENTIALS_CONTEXT_KEY = "CREDENTIALS_[" + SwitchableCredentialsOperation.class.getName() + "]";
+    String CREDENTIALS_CONTEXT_KEY = "CREDENTIALS_@@[" + SwitchableCredentialsOperation.class.getName() + "]";
 
     /**
-     * Switch credentials mono.
+     * The constant DEFAULT_CREDENTIALS_IDENTITY
+     */
+    String DEFAULT_CREDENTIALS_IDENTITY = "DEFAULT_CREDENTIALS_IDENTITY_@@[" + SwitchableCredentialsOperation.class.getName() + "]";
+
+    /**
+     * Switch credentials .
      *
      * @param credentialsIdentity the credentials identity
-     * @return the mono
+     * @param fallbackWithDefault whether fallback to default
+     * @return Void
      */
-    Mono<Void> switchCredentials(String credentialsIdentity);
+    Mono<Void> switchCredentials(String credentialsIdentity, boolean fallbackWithDefault);
+
+    /**
+     * Switch credentials . Not attempt to back to default
+     *
+     * @param credentialsIdentity the credentials identity
+     * @return Void
+     */
+    default Mono<Void> switchCredentials(String credentialsIdentity) {
+        return switchCredentials(credentialsIdentity, false);
+    }
+
+    /**
+     * Using default credentials
+     * @return Void
+     */
+    default Mono<Void> usingDefaultCredentials() {
+        return switchCredentials(DEFAULT_CREDENTIALS_IDENTITY, true);
+    }
 
 }
